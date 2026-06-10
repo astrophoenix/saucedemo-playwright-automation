@@ -1,0 +1,68 @@
+name: Workflow Dispatch Inputs Demo
+
+on:
+  workflow_dispatch:
+    inputs:
+
+      application_name:
+        description: "Nombre de la aplicación"
+        required: true
+        type: string
+
+      version:
+        description: "Versión a desplegar"
+        required: true
+        default: "1.0.0"
+        type: string
+
+      replicas:
+        description: "Cantidad de réplicas"
+        required: true
+        default: 2
+        type: number
+
+      run_tests:
+        description: "¿Ejecutar pruebas?"
+        required: true
+        default: true
+        type: boolean
+
+      environment:
+        description: "Ambiente de despliegue"
+        required: true
+        type: choice
+        options:
+          - dev
+          - qa
+          - prod
+
+      target_environment:
+        description: "GitHub Environment"
+        required: true
+        type: environment
+
+jobs:
+  show-inputs:
+    runs-on: ubuntu-latest
+
+    environment: ${{ inputs.target_environment }}
+
+    steps:
+      - name: Mostrar inputs recibidos
+        run: |
+          echo "Application Name: ${{ inputs.application_name }}"
+          echo "Version: ${{ inputs.version }}"
+          echo "Replicas: ${{ inputs.replicas }}"
+          echo "Run Tests: ${{ inputs.run_tests }}"
+          echo "Environment: ${{ inputs.environment }}"
+          echo "GitHub Environment: ${{ inputs.target_environment }}"
+
+      - name: Ejecutar pruebas si corresponde
+        if: ${{ inputs.run_tests }}
+        run: echo "Ejecutando pruebas..."
+
+      - name: Desplegar
+        run: |
+          echo "Desplegando ${{ inputs.application_name }}"
+          echo "Versión ${{ inputs.version }}"
+          echo "Ambiente ${{ inputs.environment }}"
