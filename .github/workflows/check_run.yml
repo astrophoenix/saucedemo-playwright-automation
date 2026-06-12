@@ -1,0 +1,16 @@
+name: Test Event Check Run
+
+on:
+  check_run: 
+    types: [rerequested, requested_action]
+
+jobs:
+  validation:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate
+        run: |
+          echo "Validation successful"
