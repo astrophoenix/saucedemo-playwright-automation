@@ -1,4 +1,6 @@
 name: Test Event Check Run
+run-name: GH-200 Check Run 
+
 
 on:
   check_run: 
