@@ -1,0 +1,40 @@
+name: Artifact Demo
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Crear archivo
+        run: |
+          mkdir output
+          echo "Hola desde GitHub Actions" > output/mensaje.txt
+          date >> output/mensaje.txt
+
+      - name: Mostrar contenido
+        run: cat output/mensaje.txt
+
+      - name: Subir artefacto
+        uses: actions/upload-artifact@v4
+        with:
+          name: mensaje-artifact
+          path: output/mensaje.txt
+
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar artefacto
+        uses: actions/download-artifact@v4
+        with:
+          name: mensaje-artifact
+
+      - name: Ver estructura
+        run: ls -R
+
+      - name: Mostrar contenido descargado
+        run: cat mensaje.txt
